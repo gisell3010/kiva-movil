@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="LaunchTheme" parent="@android:style/Theme.Material.NoActionBar">
+        <item name="android:windowSplashScreenBackground">@color/kiva_splash_background</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/kiva_icon</item>
+        <item name="android:windowSplashScreenIconBackgroundColor">@color/kiva_icon_background</item>
+        <item name="android:windowBackground">@color/kiva_splash_background</item>
+    </style>
+    <style name="NormalTheme" parent="@android:style/Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/kiva_splash_background</item>
+    </style>
+</resources>
