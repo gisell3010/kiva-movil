@@ -51,7 +51,9 @@ class Validators {
     final domain = parts[1];
     if (local.isEmpty || local.length > 64 ||
         local.startsWith('.') || local.endsWith('.') ||
-        !_emailLocal.hasMatch(local)) return error;
+        !_emailLocal.hasMatch(local)) {
+      return error;
+    }
 
     final labels = domain.split('.');
     if (labels.length < 2 ||
