@@ -4,10 +4,12 @@ build/
 .tooling/
 android/.gradle/
 android/local.properties
-android/.kotlin/
 android/key.properties
 *.jks
 *.keystore
+.env*
+android/.kotlin/
+android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java
 .idea/
 .vscode/
 *.iml
@@ -16,4 +18,4 @@ coverage/
 *.p12
 *.pem
 *.crt
-.env*
+.automation/

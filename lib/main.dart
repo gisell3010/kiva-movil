@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'app.dart';
-import 'core/api_client.dart';
-import 'core/config.dart';
-import 'core/session_store.dart';
-import 'features/auth/repositories/auth_repository.dart';
-import 'features/auth/state/auth_controller.dart';
+import 'package:kiva_mobile_final/pages/app.dart';
+import 'package:kiva_mobile_final/services/api_client.dart';
+import 'package:kiva_mobile_final/services/config.dart';
+import 'package:kiva_mobile_final/services/session_store.dart';
+import 'package:kiva_mobile_final/repositories/auth/auth_repository.dart';
+import 'package:kiva_mobile_final/bloc/auth/auth_bloc.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   final base = ApiConfig.validate(ApiConfig.defaultUrl);
   final api = ApiClient(store: SecureSessionStore(base.toString()));
-  final auth = AuthController(AuthRepository(api));
+  final auth = AuthBloc(AuthRepository(api));
   runApp(KivaApp(auth: auth));
   auth.start();
 }

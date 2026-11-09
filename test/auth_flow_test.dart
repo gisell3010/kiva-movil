@@ -1,12 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:kiva_mobile/app.dart';
-import 'package:kiva_mobile/core/api_client.dart';
-import 'package:kiva_mobile/features/auth/pages/auth_page.dart';
-import 'package:kiva_mobile/features/auth/pages/welcome_page.dart';
-import 'package:kiva_mobile/features/auth/repositories/auth_repository.dart';
-import 'package:kiva_mobile/features/auth/state/auth_controller.dart';
+import 'package:kiva_mobile_final/pages/app.dart';
+import 'package:kiva_mobile_final/services/api_client.dart';
+import 'package:kiva_mobile_final/pages/auth/auth_page.dart';
+import 'package:kiva_mobile_final/pages/auth/welcome_page.dart';
+import 'package:kiva_mobile_final/repositories/auth/auth_repository.dart';
+import 'package:kiva_mobile_final/bloc/auth/auth_controller.dart';
 import 'session_test.dart' as fixtures;
 
 void main() {
@@ -69,7 +69,9 @@ void main() {
     'El teclado envía el acceso y un error permite corregir los datos',
     (tester) async {
       final auth = RecordingAuth();
-      await tester.runAsync(auth.start);
+      final startup = auth.start();
+      await tester.pump();
+      await startup;
       await tester.pumpWidget(KivaApp(auth: auth));
       await tester.pumpAndSettle();
       await tester.ensureVisible(find.text('Iniciar sesión'));
@@ -110,7 +112,9 @@ void main() {
     final auth = AuthController(
       AuthRepository(ApiClient(store: fixtures.MemoryStore())),
     );
-    await tester.runAsync(auth.start);
+    final startup = auth.start();
+    await tester.pump();
+    await startup;
     await tester.pumpWidget(KivaApp(auth: auth));
     await tester.pumpAndSettle();
     await tester.ensureVisible(find.text('Crear una cuenta'));
@@ -150,7 +154,9 @@ void main() {
       final auth = AuthController(
         AuthRepository(ApiClient(store: fixtures.MemoryStore())),
       );
-      await tester.runAsync(auth.start);
+      final startup = auth.start();
+      await tester.pump();
+      await startup;
       await tester.pumpWidget(KivaApp(auth: auth));
       await tester.pumpAndSettle();
       await tester.ensureVisible(find.text('Crear una cuenta'));
@@ -181,7 +187,6 @@ class RecordingAuth extends AuthController {
     requests++;
     this.email = email;
     this.password = password;
-    error = 'Revisa tu correo y contraseña.';
-    notifyListeners();
+    emit(state.copyWith(error: 'Revisa tu correo y contraseña.'));
   }
 }

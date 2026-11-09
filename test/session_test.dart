@@ -3,12 +3,12 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:kiva_mobile/core/api_client.dart';
-import 'package:kiva_mobile/core/config.dart';
-import 'package:kiva_mobile/core/errors.dart';
-import 'package:kiva_mobile/core/session_store.dart';
-import 'package:kiva_mobile/features/auth/models/account.dart';
-import 'package:kiva_mobile/shared/validators.dart';
+import 'package:kiva_mobile_final/services/api_client.dart';
+import 'package:kiva_mobile_final/services/config.dart';
+import 'package:kiva_mobile_final/services/errors.dart';
+import 'package:kiva_mobile_final/services/session_store.dart';
+import 'package:kiva_mobile_final/models/account.dart';
+import 'package:kiva_mobile_final/services/validators.dart';
 
 class MemoryStore implements SessionStore {
   String? value;

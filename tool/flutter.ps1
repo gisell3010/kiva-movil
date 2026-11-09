@@ -13,9 +13,25 @@ foreach ($name in $environmentNames) {
 $env:APPDATA = Join-Path $tooling 'appdata'
 $env:PUB_CACHE = Join-Path $tooling 'pub-cache'
 $env:GRADLE_USER_HOME = Join-Path $tooling 'gradle'
-$env:ANDROID_HOME = Join-Path $tooling 'android-sdk'
+$localAndroidSdk = Join-Path $tooling 'android-sdk'
+$configuredAndroidSdk = [Environment]::GetEnvironmentVariable('ANDROID_HOME', 'Process')
+if ((Test-Path -LiteralPath (Join-Path $localAndroidSdk 'platforms')) -or
+    [string]::IsNullOrWhiteSpace($configuredAndroidSdk)) {
+  if (Test-Path -LiteralPath (Join-Path $localAndroidSdk 'platforms')) {
+    $env:ANDROID_HOME = $localAndroidSdk
+  } elseif (Test-Path -LiteralPath 'C:\Users\Usuario\AppData\Local\Android\Sdk') {
+    $env:ANDROID_HOME = 'C:\Users\Usuario\AppData\Local\Android\Sdk'
+  } else {
+    $env:ANDROID_HOME = $localAndroidSdk
+  }
+} else {
+  $env:ANDROID_HOME = $configuredAndroidSdk
+}
 $env:ANDROID_SDK_ROOT = $env:ANDROID_HOME
-$env:ANDROID_NDK_HOME = Join-Path $env:ANDROID_HOME 'ndk\28.2.13676358'
+$localNdk = Join-Path $env:ANDROID_HOME 'ndk\28.2.13676358'
+if (Test-Path -LiteralPath $localNdk) {
+  $env:ANDROID_NDK_HOME = $localNdk
+}
 $env:ANDROID_USER_HOME = Join-Path $tooling 'android-user'
 $env:DART_SUPPRESS_ANALYTICS = 'true'
 $env:FLUTTER_SUPPRESS_ANALYTICS = 'true'

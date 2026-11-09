@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:kiva_mobile/app.dart';
-import 'package:kiva_mobile/core/api_client.dart';
-import 'package:kiva_mobile/features/auth/repositories/auth_repository.dart';
-import 'package:kiva_mobile/features/auth/state/auth_controller.dart';
+import 'package:kiva_mobile_final/pages/app.dart';
+import 'package:kiva_mobile_final/services/api_client.dart';
+import 'package:kiva_mobile_final/repositories/auth/auth_repository.dart';
+import 'package:kiva_mobile_final/bloc/auth/auth_controller.dart';
 import 'session_test.dart' as fixtures;
 
 void main() {
@@ -21,7 +21,9 @@ void main() {
           }),
       );
       final auth = AuthController(AuthRepository(api));
-      await auth.start();
+      final startup = auth.start();
+      await tester.pump();
+      await startup;
       await tester.pumpWidget(KivaApp(auth: auth));
       await tester.pumpAndSettle();
       expect(find.text('Iniciar sesión'), findsOneWidget);
@@ -59,18 +61,26 @@ void main() {
           }),
       );
       final auth = AuthController(AuthRepository(api));
-      await auth.start();
+      final startup = auth.start();
+      await tester.pump();
+      await startup;
       await tester.pumpWidget(KivaApp(auth: auth));
       await tester.pumpAndSettle();
-      await tester.runAsync(
-        () =>
-            auth.submit(email: 'ana@example.com', password: 'example-password'),
+      final login = auth.submit(
+        email: 'ana@example.com',
+        password: 'example-password',
       );
+      await tester.pumpAndSettle();
+      await login;
       await tester.pumpAndSettle();
       expect(find.text('Hola, Ana Pérez'), findsOneWidget);
       expect(find.text('3'), findsOneWidget);
       expect(find.text('Mi espacio de trabajo'), findsNothing);
-      await tester.runAsync(auth.signOut);
+      await tester.tap(find.byTooltip('Menú de cuenta'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Cerrar sesión'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Confirmar'));
       await tester.pumpAndSettle();
       expect(find.text('Iniciar sesión'), findsOneWidget);
       expect(find.text('Hola, Ana Pérez'), findsNothing);
@@ -90,7 +100,9 @@ void main() {
     final auth = AuthController(
       AuthRepository(ApiClient(store: fixtures.MemoryStore())),
     );
-    await auth.start();
+    final startup = auth.start();
+    await tester.pump();
+    await startup;
     await tester.pumpWidget(KivaApp(auth: auth));
     await tester.pumpAndSettle();
     await tester.scrollUntilVisible(

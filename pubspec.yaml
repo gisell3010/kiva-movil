@@ -1,4 +1,4 @@
-name: kiva_mobile
+name: kiva_mobile_final
 description: Aplicación Android de KIVA.
 publish_to: none
 version: 1.0.0+1
@@ -13,6 +13,7 @@ dependencies:
   flutter_secure_storage: ^9.2.2
   go_router: ^14.2.0
   image_picker: ^1.1.2
+  flutter_bloc: ^9.1.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -20,5 +21,8 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - assets/brand/logo.png
     - assets/brand/kiva-logo.png
+    - assets/images/login-cover.jpg
+    - assets/images/login-background.jpg
 
